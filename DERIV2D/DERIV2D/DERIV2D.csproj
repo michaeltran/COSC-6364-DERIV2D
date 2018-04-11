@@ -9,6 +9,9 @@
     <None Update="DERIV2D_functionA_XY.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="DERIV2D_functionB_XY.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

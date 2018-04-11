@@ -11,12 +11,12 @@ namespace DERIV2D
 		List<Coordinate> oCoordinates;
 		List<Derivative> oDerivatives;
 
-		public DERIV2D(string aSourcePath)
+		public DERIV2D(string aSourcePathG, string aSourcePathB)
 		{
 			oCoordinates = new List<Coordinate>();
 			oDerivatives = new List<Derivative>();
 
-			using (StreamReader oReader = new StreamReader(aSourcePath))
+			using (StreamReader oReader = new StreamReader(aSourcePathG))
 			{
 				while (!oReader.EndOfStream)
 				{
@@ -32,11 +32,11 @@ namespace DERIV2D
 		{
 			for (int i = 0; i < oCoordinates.Count - 1; i++)
 			{
-				oDerivatives.Add(GetDerivative(oCoordinates[i], oCoordinates[i + 1]));
+				oDerivatives.Add(GetDerivative(oCoordinates[i + 1], oCoordinates[i]));
 			}
 		}
 
-		private Derivative GetDerivative(Coordinate aStart, Coordinate aEnd)
+		private Derivative GetDerivative(Coordinate aEnd, Coordinate aStart)
 		{
 			double x;
 			double y;

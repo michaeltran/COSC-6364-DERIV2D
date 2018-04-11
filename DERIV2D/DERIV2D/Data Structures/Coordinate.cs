@@ -6,6 +6,8 @@ namespace DERIV2D.Data_Structures
 {
     public class Coordinate
     {
+		public List<double> axis;
+
 		public double x;
 		public double y;
 
