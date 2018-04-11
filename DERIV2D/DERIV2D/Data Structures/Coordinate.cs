@@ -6,15 +6,11 @@ namespace DERIV2D.Data_Structures
 {
     public class Coordinate
     {
-		public List<double> axis;
+		public List<double> Values;
 
-		public double x;
-		public double y;
-
-		public Coordinate(double aX, double aY)
+		public Coordinate(List<double> aValues)
 		{
-			this.x = aX;
-			this.y = aY;
+			this.Values = aValues;
 		}
     }
 }

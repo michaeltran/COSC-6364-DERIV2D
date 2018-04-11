@@ -8,13 +8,15 @@ namespace DERIV2D
 {
     public class DERIV2D
     {
-		List<Coordinate> oCoordinates;
-		List<Derivative> oDerivatives;
+		List<Coordinate> oCoordinatesG;
+		List<Derivative> oDerivativesG;
+		List<Derivative> oDerivativesB;
 
 		public DERIV2D(string aSourcePathG, string aSourcePathB)
 		{
-			oCoordinates = new List<Coordinate>();
-			oDerivatives = new List<Derivative>();
+			oCoordinatesG = new List<Coordinate>();
+			oDerivativesG = new List<Derivative>();
+			oDerivativesB = new List<Derivative>();
 
 			using (StreamReader oReader = new StreamReader(aSourcePathG))
 			{
@@ -23,28 +25,85 @@ namespace DERIV2D
 					string line = oReader.ReadLine();
 					string[] values = line.Split(',');
 
-					oCoordinates.Add(new Coordinate(Convert.ToDouble(values[0]), Convert.ToDouble(values[1])));
+					List<double> oValues = new List<double>();
+					foreach(string value in values)
+					{
+						oValues.Add(Convert.ToDouble(value));
+					}
+
+					oCoordinatesG.Add(new Coordinate(oValues));
+				}
+			}
+
+			using (StreamReader oReader = new StreamReader(aSourcePathB))
+			{
+				while (!oReader.EndOfStream)
+				{
+					string line = oReader.ReadLine();
+					string[] values = line.Split(',');
+
+					List<double> oValues = new List<double>();
+					foreach (string value in values)
+					{
+						oValues.Add(Convert.ToDouble(value));
+					}
+
+					oDerivativesB.Add(new Derivative(oValues));
 				}
 			}
 		}
 
 		public void RunAlgorithm()
 		{
-			for (int i = 0; i < oCoordinates.Count - 1; i++)
+			for (int i = 0; i < oCoordinatesG.Count - 1; i++)
 			{
-				oDerivatives.Add(GetDerivative(oCoordinates[i + 1], oCoordinates[i]));
+				oDerivativesG.Add(GetDerivative(oCoordinatesG[i + 1], oCoordinatesG[i]));
+			}
+
+			CompareDerivatives();
+		}
+
+		public void CompareDerivatives()
+		{
+			// Compare derivatives B and G now
+
+			List<double> AvgGs = new List<double>();
+			List<double> AvgBs = new List<double>();
+
+			int temp = Convert.ToInt32(Math.Floor((double)oDerivativesB.Count / oDerivativesG.Count));
+
+			int j = 0;
+
+			for (int i = 0; i < oDerivativesG.Count; i++)
+			{
+				//double avgG = (oDerivativesG[i].Values[0] + oDerivativesG[i+1].Values[0]) / 2;
+				double avgG = oDerivativesG[i].Values[0];
+
+				double sum = 0;
+
+				for (int it = 0; it < temp; it++)
+				{
+					sum += oDerivativesB[j].Values[0];
+					j++;
+				}
+
+				double avgB = sum / temp;
+
+				AvgGs.Add(avgG);
+				AvgBs.Add(avgB);
 			}
 		}
 
 		private Derivative GetDerivative(Coordinate aEnd, Coordinate aStart)
 		{
-			double x;
-			double y;
+			List<double> oValues = new List<double>();
 
-			x = aEnd.x - aStart.x;
-			y = aEnd.y - aStart.y;
+			for (int i = 0; i < aEnd.Values.Count; i++)
+			{
+				oValues.Add(aEnd.Values[i] - aStart.Values[i]);
+			}
 
-			Derivative oDerivative = new Derivative(x, y);
+			Derivative oDerivative = new Derivative(oValues);
 			return oDerivative;
 		}
     }

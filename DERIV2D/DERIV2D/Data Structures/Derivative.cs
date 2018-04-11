@@ -6,13 +6,11 @@ namespace DERIV2D.Data_Structures
 {
     public class Derivative
     {
-		double x;
-		double y;
+		public List<double> Values;
 
-		public Derivative(double aX, double aY)
+		public Derivative(List<double> aValues)
 		{
-			this.x = aX;
-			this.y = aY;
+			this.Values = aValues;
 		}
 	}
 }
