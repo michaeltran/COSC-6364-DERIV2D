@@ -1,3 +1,7 @@
+# R-specific files
+.Rhistory
+.RData
+
 # User-specific files
 *.suo
 *.user
