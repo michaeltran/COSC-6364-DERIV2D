@@ -11,7 +11,8 @@ namespace DERIV2D
 			obj.RunNormalization();
 			obj.CompareDerivativesStaticSteps1();
 			obj.CompareDerivativesStaticSteps2();
-			obj.CompareDerivativesDynamicSteps();
+			obj.CompareDerivativesDynamicSteps1();
+			obj.CompareDerivativesDynamicSteps2();
 
 			Console.WriteLine("Press any key to continue...");
 			Console.ReadKey();

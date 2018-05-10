@@ -223,9 +223,9 @@ namespace DERIV2D
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
 
-		public void CompareDerivativesDynamicSteps()
+		public void CompareDerivativesDynamicSteps1()
 		{
-			WriteLog("Start - Comparing function A and B using dynamic step method");
+			WriteLog("Start - Comparing function A and B using dynamic step method 1");
 			// Compare derivatives B and A now
 
 			List<Derivative> AvgAs = new List<Derivative>();
@@ -265,8 +265,65 @@ namespace DERIV2D
 				AvgBs.Add(new Derivative(sumsB));
 			}
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_DYNAMIC.csv", AvgAs);
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_DYNAMIC.csv", AvgBs);
+			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_DYNAMIC_1.csv", AvgAs);
+			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_DYNAMIC_1.csv", AvgBs);
+
+			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
+		}
+
+		public void CompareDerivativesDynamicSteps2()
+		{
+			WriteLog("Start - Comparing function A and B using dynamic step method 2");
+			// Compare derivatives B and A now
+
+			List<Derivative> AvgAs = new List<Derivative>();
+			List<Derivative> AvgBs = new List<Derivative>();
+
+			double stepsInB = (double)myDerivativesB.Count / myDerivativesA.Count;
+			stepsInB += stepsInB / myDerivativesA.Count;
+			double dynamicStepCounter = 0;
+			int currentStepInB = 0;
+
+			for (int currentStepInA = 0; currentStepInA < myDerivativesA.Count - 1; currentStepInA++)
+			{
+				dynamicStepCounter += stepsInB;
+				int stepsToTakeInB = 0;
+				if (currentStepInA == myDerivativesA.Count - 2)
+				{
+					stepsToTakeInB = Convert.ToInt32(Math.Ceiling(dynamicStepCounter));
+				}
+				else
+				{
+					stepsToTakeInB = Convert.ToInt32(Math.Floor(dynamicStepCounter));
+				}
+				dynamicStepCounter -= stepsToTakeInB;
+
+				List<double> sumsA = new List<double>()
+				{
+					(myDerivativesA[currentStepInA].Values[0] + myDerivativesA[currentStepInA + 1].Values[0]) / 2,
+					(myDerivativesA[currentStepInA].Values[1] + myDerivativesA[currentStepInA + 1].Values[1]) / 2
+				};
+
+				List<double> sumsB = new List<double>() { 0, 0 };
+
+				for (int it = 0; it < stepsToTakeInB; it++)
+				{
+					sumsB[0] += myDerivativesB[currentStepInB].Values[0];
+					sumsB[1] += myDerivativesB[currentStepInB].Values[1];
+					currentStepInB++;
+				}
+
+				for (int i = 0; i < sumsB.Count; i++)
+				{
+					sumsB[i] = sumsB[i] / stepsToTakeInB;
+				}
+
+				AvgAs.Add(new Derivative(sumsA));
+				AvgBs.Add(new Derivative(sumsB));
+			}
+
+			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_DYNAMIC_2.csv", AvgAs);
+			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_DYNAMIC_2.csv", AvgBs);
 
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
