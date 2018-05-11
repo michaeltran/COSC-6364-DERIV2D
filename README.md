@@ -18,6 +18,8 @@ The goal of this project is to extract derivatives and gradients of multidimensi
 
 ## Implementation Details
 
+The project is split up into two parts:
+
 Part 1 (DERIV2D) was developed in **.NET Core C#** using Microsoft Visual Studio 2018.
 
 Part 2 was developed in **R** using R Studio.
@@ -26,9 +28,17 @@ Part 2 was developed in **R** using R Studio.
 
 ## How to Build
 
-To build the executable for Windows 10, open the DERIV2D.sln file in Microsoft Visual Studio 2018 and "publish" the application. (Right-Click the Solution in Solution Explorer in VS18 and click Publish, then in the "Publish" tab, click the "Publish" button)
+### Part 1
+
+To build the executable for Windows 10, open the DERIV2D.sln file in Microsoft Visual Studio 2018 and "publish" the application. (Right-Click the Solution in Solution Explorer in VS18 and click Publish, then in the "Publish" tab, click the Publish button)
 
 The default publish location of the executable will be located in **"./DERIV2D/DERIV2D/bin\Release\netcoreapp2.0\win10-x64\publish"**.
+
+### Part 2
+
+To run part 2, **put the output from Part 1 into the "R" folder** and then navigate to the "R" folder and open "compare-functions.R" and "plot_basic_graphs.R" in R Studio. Clear environment data and then run the entire source code in both files.
+
+This will generate the plots used in the report.
 
 ---
 
