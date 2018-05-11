@@ -6,6 +6,7 @@ namespace DERIV2D
     {
         static void Main(string[] args)
         {
+			// This part will run the DERIV2D algorithm
 			DERIV2D algorithm = new DERIV2D(@"./DERIV2D_functionA_XY.csv", "./DERIV2D_functionB_XY.csv");
 			algorithm.RunDerivativeAlgorithm();
 			algorithm.RunNormalization();

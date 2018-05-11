@@ -65,10 +65,11 @@ namespace DERIV2D
 		}
 
 		/// <summary>
-		/// Calcualtes the derivative 
+		/// Calcualtes the derivative of Function A
 		/// </summary>
 		public void RunDerivativeAlgorithm()
 		{
+			// Loop and calculate the derivative values
 			for (int i = 0; i < myCoordinatesA.Count - 1; i++)
 			{
 				myDerivativesA.Add(GetDerivative(myCoordinatesA[i + 1], myCoordinatesA[i]));
@@ -77,6 +78,9 @@ namespace DERIV2D
 			OutputDerivativeToFile(@"..\..\..\..\..\R\DERIV_A.csv", myDerivativesA);
 		}
 
+		/// <summary>
+		/// Normalizes the data in Function A and Function B
+		/// </summary>
 		public void RunNormalization()
 		{
 			double maxValue;
@@ -86,6 +90,7 @@ namespace DERIV2D
 			maxOfA = GetMaxValue(myDerivativesA);
 			maxOfB = GetMaxValue(myDerivativesB);
 
+			// Determines which one is the maximum and stores that value into maxValue
 			if (maxOfA > maxOfB)
 			{
 				maxValue = maxOfA;
@@ -101,17 +106,25 @@ namespace DERIV2D
 			OutputDerivativeToFile(@"..\..\..\..\..\R\DERIV_A_NORMALIZED.csv", myDerivativesA);
 		}
 
+		/// <summary>
+		/// Gets and returns the maximum value of a derivative
+		/// </summary>
+		/// <param name="aDerivatives">The derivative to determine max value of</param>
+		/// <returns></returns>
 		private double GetMaxValue(List<Derivative> aDerivatives)
 		{
 			double maxValue = 0;
 
+			// Loop through derivative and return the max value
 			for (int i = 0; i < aDerivatives.Count; i++)
 			{
 				double xValue = Math.Abs(aDerivatives[i].Values[0]);
 				double yValue = Math.Abs(aDerivatives[i].Values[1]);
 
+				// Determines if X or Y is larger
 				if (xValue > yValue)
 				{
+					// If X is larger than current max, set current max to X
 					if (xValue > maxValue)
 					{
 						maxValue = xValue;
@@ -119,6 +132,7 @@ namespace DERIV2D
 				}
 				else // (xValue <= yValue)
 				{
+					// If Y is larger than current max, set current max to Y
 					if (yValue > maxValue)
 					{
 						maxValue = yValue;
@@ -129,8 +143,14 @@ namespace DERIV2D
 			return maxValue;
 		}
 
+		/// <summary>
+		/// Normalizes all values of a derivative
+		/// </summary>
+		/// <param name="aDerivatives">The derivative to normalize</param>
+		/// <param name="aMaxValue">The maximum value to normalize by</param>
 		private void NormalizeValues(List<Derivative> aDerivatives, double aMaxValue)
 		{
+			// Loops through derivative and normalizes
 			for (int i = 0; i < aDerivatives.Count; i++)
 			{
 				aDerivatives[i].Values[0] = aDerivatives[i].Values[0] / aMaxValue;
@@ -138,10 +158,12 @@ namespace DERIV2D
 			}
 		}
 
+		/// <summary>
+		/// SSM1 Method - Compares a point in A to the average of points in B
+		/// </summary>
 		public void CompareDerivativesStaticSteps1()
 		{
 			WriteLog("Start - Comparing function A and B using static step method 1");
-			// Compare derivatives B and A now
 
 			List<Derivative> AvgAs = new List<Derivative>();
 			List<Derivative> AvgBs = new List<Derivative>();
@@ -149,6 +171,7 @@ namespace DERIV2D
 			int stepsInB = Convert.ToInt32(Math.Floor((double)myDerivativesB.Count / myDerivativesA.Count));
 			int currentStepInB = 0;
 
+			// Loops through Function A to get the comparison with Function B
 			for (int currentStepInA = 0; currentStepInA < myDerivativesA.Count; currentStepInA++)
 			{
 				List<double> sumsA = new List<double>()
@@ -159,6 +182,7 @@ namespace DERIV2D
 
 				List<double> sumsB = new List<double>() { 0, 0 };
 
+				// Loops through Function B by number of steps to get the sum
 				for (int it = 0; it < stepsInB; it++)
 				{
 					sumsB[0] += myDerivativesB[currentStepInB].Values[0];
@@ -166,6 +190,7 @@ namespace DERIV2D
 					currentStepInB++;
 				}
 
+				// Loops through the sums and generates the average
 				for (int i = 0; i < sumsB.Count; i++)
 				{
 					sumsB[i] = sumsB[i] / stepsInB;
@@ -181,10 +206,12 @@ namespace DERIV2D
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
 
+		/// <summary>
+		/// SSM2 Method - Compares average of two points in A to the average of points in B
+		/// </summary>
 		public void CompareDerivativesStaticSteps2()
 		{
 			WriteLog("Start - Comparing function A and B using static step method 2");
-			// Compare derivatives B and A now
 
 			List<Derivative> AvgAs = new List<Derivative>();
 			List<Derivative> AvgBs = new List<Derivative>();
@@ -192,6 +219,7 @@ namespace DERIV2D
 			int stepsInB = Convert.ToInt32(Math.Floor((double)myDerivativesB.Count / myDerivativesA.Count));
 			int currentStepInB = 0;
 
+			// Loops through Function A to get the comparison with Function B
 			for (int currentStepInA = 0; currentStepInA < myDerivativesA.Count - 1; currentStepInA++)
 			{
 				List<double> sumsA = new List<double>()
@@ -202,6 +230,7 @@ namespace DERIV2D
 
 				List<double> sumsB = new List<double>() { 0, 0 };
 
+				// Loops through Function B by number of steps to get the sum
 				for (int it = 0; it < stepsInB; it++)
 				{
 					sumsB[0] += myDerivativesB[currentStepInB].Values[0];
@@ -209,6 +238,7 @@ namespace DERIV2D
 					currentStepInB++;
 				}
 
+				// Loops through the sums and generates the average
 				for (int i = 0; i < sumsB.Count; i++)
 				{
 					sumsB[i] = sumsB[i] / stepsInB;
@@ -224,10 +254,12 @@ namespace DERIV2D
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
 
+		/// <summary>
+		/// DSM1 Method - Compares a point in A to the average of points in B
+		/// </summary>
 		public void CompareDerivativesDynamicSteps1()
 		{
 			WriteLog("Start - Comparing function A and B using dynamic step method 1");
-			// Compare derivatives B and A now
 
 			List<Derivative> AvgAs = new List<Derivative>();
 			List<Derivative> AvgBs = new List<Derivative>();
@@ -236,6 +268,7 @@ namespace DERIV2D
 			double dynamicStepCounter = 0;
 			int currentStepInB = 0;
 
+			// Loops through Function A to get the comparison with Function B
 			for (int currentStepInA = 0; currentStepInA < myDerivativesA.Count; currentStepInA++)
 			{
 				dynamicStepCounter += stepsInB;
@@ -250,6 +283,7 @@ namespace DERIV2D
 
 				List<double> sumsB = new List<double>() { 0, 0 };
 
+				// Loops through Function B by number of steps to get the sum
 				for (int it = 0; it < stepsToTakeInB; it++)
 				{
 					sumsB[0] += myDerivativesB[currentStepInB].Values[0];
@@ -257,6 +291,7 @@ namespace DERIV2D
 					currentStepInB++;
 				}
 
+				// Loops through the sums and generates the average
 				for (int i = 0; i < sumsB.Count; i++)
 				{
 					sumsB[i] = sumsB[i] / stepsToTakeInB;
@@ -272,10 +307,12 @@ namespace DERIV2D
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
 
+		/// <summary>
+		/// DSM2 Method - Compares average of two points in A to the average of points in B
+		/// </summary>
 		public void CompareDerivativesDynamicSteps2()
 		{
 			WriteLog("Start - Comparing function A and B using dynamic step method 2");
-			// Compare derivatives B and A now
 
 			List<Derivative> AvgAs = new List<Derivative>();
 			List<Derivative> AvgBs = new List<Derivative>();
@@ -285,6 +322,7 @@ namespace DERIV2D
 			double dynamicStepCounter = 0;
 			int currentStepInB = 0;
 
+			// Loops through Function A to get the comparison with Function B
 			for (int currentStepInA = 0; currentStepInA < myDerivativesA.Count - 1; currentStepInA++)
 			{
 				dynamicStepCounter += stepsInB;
@@ -307,6 +345,7 @@ namespace DERIV2D
 
 				List<double> sumsB = new List<double>() { 0, 0 };
 
+				// Loops through Function B by number of steps to get the sum
 				for (int it = 0; it < stepsToTakeInB; it++)
 				{
 					sumsB[0] += myDerivativesB[currentStepInB].Values[0];
@@ -314,6 +353,7 @@ namespace DERIV2D
 					currentStepInB++;
 				}
 
+				// Loops through the sums and generates the average
 				for (int i = 0; i < sumsB.Count; i++)
 				{
 					sumsB[i] = sumsB[i] / stepsToTakeInB;
@@ -329,6 +369,12 @@ namespace DERIV2D
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
 
+		/// <summary>
+		/// Gets the derivative values from a start and end coordinate
+		/// </summary>
+		/// <param name="aEnd">The end coordinate</param>
+		/// <param name="aStart">The start coordinate</param>
+		/// <returns>The derivative</returns>
 		private Derivative GetDerivative(Coordinate aEnd, Coordinate aStart)
 		{
 			List<double> oValues = new List<double>();
@@ -342,6 +388,11 @@ namespace DERIV2D
 			return oDerivative;
 		}
 
+		/// <summary>
+		/// Ouputs the derivative to a file
+		/// </summary>
+		/// <param name="aPath"></param>
+		/// <param name="aDerivatives"></param>
 		public void OutputDerivativeToFile(string aPath, List<Derivative> aDerivatives)
 		{
 			using (System.IO.StreamWriter output = new System.IO.StreamWriter(aPath))
