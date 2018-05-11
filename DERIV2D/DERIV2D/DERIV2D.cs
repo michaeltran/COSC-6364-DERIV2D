@@ -16,13 +16,17 @@ namespace DERIV2D
 		// Derivatives from graph B
 		List<Derivative> myDerivativesB;
 
+		// Directory to output to
+		string myOutputDirectory;
+
 		/// <summary>
 		/// Constructor - Loads coordinates for function A and derivatives for function B
 		/// </summary>
 		/// <param name="aSourcePathA">Source path of function A</param>
 		/// <param name="aSourcePathB">Source path of function B</param>
-		public DERIV2D(string aSourcePathA, string aSourcePathB)
+		public DERIV2D(string aSourcePathA, string aSourcePathB, string aOutputDirectory)
 		{
+			myOutputDirectory = aOutputDirectory.TrimEnd('\\') + @"\";
 			myCoordinatesA = new List<Coordinate>();
 			myDerivativesA = new List<Derivative>();
 			myDerivativesB = new List<Derivative>();
@@ -75,7 +79,7 @@ namespace DERIV2D
 				myDerivativesA.Add(GetDerivative(myCoordinatesA[i + 1], myCoordinatesA[i]));
 			}
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\DERIV_A.csv", myDerivativesA);
+			OutputDerivativeToFile(@"DERIV_A.csv", myDerivativesA);
 		}
 
 		/// <summary>
@@ -103,7 +107,7 @@ namespace DERIV2D
 			NormalizeValues(myDerivativesA, maxValue);
 			NormalizeValues(myDerivativesB, maxValue);
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\DERIV_A_NORMALIZED.csv", myDerivativesA);
+			OutputDerivativeToFile(@"DERIV_A_NORMALIZED.csv", myDerivativesA);
 		}
 
 		/// <summary>
@@ -200,8 +204,8 @@ namespace DERIV2D
 				AvgBs.Add(new Derivative(sumsB));
 			}
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_STATIC_1.csv", AvgAs);
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_STATIC_1.csv", AvgBs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_A_STATIC_1.csv", AvgAs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_B_STATIC_1.csv", AvgBs);
 
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
@@ -248,8 +252,8 @@ namespace DERIV2D
 				AvgBs.Add(new Derivative(sumsB));
 			}
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_STATIC_2.csv", AvgAs);
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_STATIC_2.csv", AvgBs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_A_STATIC_2.csv", AvgAs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_B_STATIC_2.csv", AvgBs);
 
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
@@ -301,8 +305,8 @@ namespace DERIV2D
 				AvgBs.Add(new Derivative(sumsB));
 			}
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_DYNAMIC_1.csv", AvgAs);
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_DYNAMIC_1.csv", AvgBs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_A_DYNAMIC_1.csv", AvgAs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_B_DYNAMIC_1.csv", AvgBs);
 
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
@@ -363,8 +367,8 @@ namespace DERIV2D
 				AvgBs.Add(new Derivative(sumsB));
 			}
 
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_A_DYNAMIC_2.csv", AvgAs);
-			OutputDerivativeToFile(@"..\..\..\..\..\R\COMPARE_DERIV_B_DYNAMIC_2.csv", AvgBs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_A_DYNAMIC_2.csv", AvgAs);
+			OutputDerivativeToFile(@"COMPARE_DERIV_B_DYNAMIC_2.csv", AvgBs);
 
 			WriteLog(string.Format("Done  - Skipped {0} coordinates in B", myDerivativesB.Count - currentStepInB));
 		}
@@ -379,6 +383,7 @@ namespace DERIV2D
 		{
 			List<double> oValues = new List<double>();
 
+			// Loop through the number of axises and get the derivative
 			for (int i = 0; i < aEnd.Values.Count; i++)
 			{
 				oValues.Add(aEnd.Values[i] - aStart.Values[i]);
@@ -391,18 +396,22 @@ namespace DERIV2D
 		/// <summary>
 		/// Ouputs the derivative to a file
 		/// </summary>
-		/// <param name="aPath"></param>
-		/// <param name="aDerivatives"></param>
+		/// <param name="aPath">The path to output the result</param>
+		/// <param name="aDerivatives">The derivative to output</param>
 		public void OutputDerivativeToFile(string aPath, List<Derivative> aDerivatives)
 		{
+			aPath = myOutputDirectory + aPath;
+
 			using (System.IO.StreamWriter output = new System.IO.StreamWriter(aPath))
 			{
 				output.WriteLine("X,Y");
 
+				// Loop through each derivative and output it
 				foreach (Derivative oDerivative in aDerivatives)
 				{
 					StringBuilder sb = new StringBuilder(String.Empty);
 
+					// Loop through each axis and output it
 					foreach (double value in oDerivative.Values)
 					{
 						sb.Append(value + ",");
@@ -413,6 +422,10 @@ namespace DERIV2D
 			}
 		}
 
+		/// <summary>
+		/// Writes a log line to the command line
+		/// </summary>
+		/// <param name="aLog">The string to log</param>
 		private void WriteLog(string aLog)
 		{
 			Console.WriteLine(String.Format("{0} - {1}", DateTime.Now, aLog));
