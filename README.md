@@ -19,12 +19,19 @@ The goal of this project is to extract derivatives and gradients of multidimensi
 ## Important Files and Locations
 
 Report: Report.doc/Report.pdf
+
 Source Code (Part 1): DERIV2D
+
 Source Code (Part 2): R
+
 Pre-built Executable: DERIV2D-Executable\DERIV2D
+
 Readme: README.md
+
 Powerpoint: Final Project Presentation - DERIV2D.pptx (includes audio from video presentation)
+
 Video Presentation: Final Project Presentation - DERIV2D.mp4
+
 
 Input: DERIV2D_functionA_XY.csv, DERIV2D_functionB_XY.csv
 
