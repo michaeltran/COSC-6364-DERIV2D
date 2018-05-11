@@ -24,6 +24,7 @@ namespace DERIV2D
 		/// </summary>
 		/// <param name="aSourcePathA">Source path of function A</param>
 		/// <param name="aSourcePathB">Source path of function B</param>
+		/// <param name=aOutputDirectory">Directory to output files</param>
 		public DERIV2D(string aSourcePathA, string aSourcePathB, string aOutputDirectory)
 		{
 			myOutputDirectory = aOutputDirectory.TrimEnd('\\') + @"\";
