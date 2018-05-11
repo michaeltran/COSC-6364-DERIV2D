@@ -16,8 +16,6 @@ namespace DERIV2D
 		// Derivatives from graph B
 		List<Derivative> myDerivativesB;
 
-		//int myNumberOfAxis;
-
 		/// <summary>
 		/// Constructor - Loads coordinates for function A and derivatives for function B
 		/// </summary>
@@ -64,10 +62,11 @@ namespace DERIV2D
 					myDerivativesB.Add(new Derivative(oValues));
 				}
 			}
-
-			//myNumberOfAxis = myDerivativesB[0].Values.Count;
 		}
 
+		/// <summary>
+		/// Calcualtes the derivative 
+		/// </summary>
 		public void RunDerivativeAlgorithm()
 		{
 			for (int i = 0; i < myCoordinatesA.Count - 1; i++)
@@ -98,6 +97,8 @@ namespace DERIV2D
 
 			NormalizeValues(myDerivativesA, maxValue);
 			NormalizeValues(myDerivativesB, maxValue);
+
+			OutputDerivativeToFile(@"..\..\..\..\..\R\DERIV_A_NORMALIZED.csv", myDerivativesA);
 		}
 
 		private double GetMaxValue(List<Derivative> aDerivatives)
